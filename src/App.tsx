@@ -173,21 +173,21 @@ function App() {
     return (
         <Routes>
             <Route
-                path="/v2"
+                path="*"
                 element={
                     <PhoneFrame>
                         <ConversationV2 />
                     </PhoneFrame>
                 }
             />
-            <Route
-                path="*"
-                element={
-                    <PhoneFrame>
-                        <Conversation />
-                    </PhoneFrame>
-                }
-            />
+            {/*<Route*/}
+            {/*    path="*"*/}
+            {/*    element={*/}
+            {/*        <PhoneFrame>*/}
+            {/*            <Conversation />*/}
+            {/*        </PhoneFrame>*/}
+            {/*    }*/}
+            {/*/>*/}
         </Routes>
     );
 }
