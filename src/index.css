@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-slide-up: slide-up 0.3s ease-out backwards;
+  --animate-backdrop-fade: backdrop-fade 0.3s ease-out backwards;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #f0f2f5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+}
+
+#root {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* WhatsApp doodle wallpaper pattern */
+.wa-bg {
+  background-color: #efeae2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200' opacity='0.3'%3E%3Cdefs%3E%3Cstyle%3E.d%7Bfill:none;stroke:%23c9c2b6;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round%7D%3C/style%3E%3C/defs%3E%3Crect class='d' x='15' y='12' width='12' height='18' rx='2'/%3E%3Ccircle class='d' cx='21' cy='26' r='2'/%3E%3Cpath class='d' d='M75 20c2-4 8-4 8 1s-8 9-8 9-8-4-8-9 6-5 8-1z'/%3E%3Ccircle class='d' cx='140' cy='20' r='8'/%3E%3Cpath class='d' d='M140 14v6l4 3'/%3E%3Ccircle class='d' cx='30' cy='65' r='8'/%3E%3Ccircle cx='27' cy='63' r='1' fill='%23c9c2b6' opacity='0.4'/%3E%3Ccircle cx='33' cy='63' r='1' fill='%23c9c2b6' opacity='0.4'/%3E%3Cpath class='d' d='M26 68c1.5 2 6.5 2 8 0'/%3E%3Cpath class='d' d='M95 55v15M95 55c3-2 8-1 8 2s-5 4-8 2'/%3E%3Cellipse class='d' cx='93' cy='70' rx='3' ry='2'/%3E%3Cpath class='d' d='M150 55h16a3 3 0 013 3v10a3 3 0 01-3 3h-8l-4 4v-4h-4a3 3 0 01-3-3V58a3 3 0 013-3z'/%3E%3Crect class='d' x='10' y='110' width='18' height='13' rx='2'/%3E%3Ccircle class='d' cx='19' cy='116' r='4'/%3E%3Cpath class='d' d='M14 110l2-3h6l2 3'/%3E%3Cpath class='d' d='M85 110l2 5h5l-4 3 1.5 5-4.5-3-4.5 3 1.5-5-4 3h5z'/%3E%3Crect class='d' x='145' y='112' width='10' height='8' rx='1'/%3E%3Cpath class='d' d='M147 112v-3a3 3 0 016 0v3'/%3E%3Crect class='d' x='20' y='155' width='16' height='11' rx='1.5'/%3E%3Cpath class='d' d='M20 156l8 6 8-6'/%3E%3Cpath class='d' d='M85 168a8 8 0 0112 0M88 165a12 12 0 0116 0M82 162a16 16 0 0120 0'/%3E%3Ccircle cx='91' cy='172' r='1.5' fill='%23c9c2b6' opacity='0.4'/%3E%3Ccircle class='d' cx='155' cy='165' r='8'/%3E%3Cellipse class='d' cx='155' cy='165' rx='4' ry='8'/%3E%3Cline class='d' x1='147' y1='165' x2='163' y2='165'/%3E%3Ccircle class='d' cx='55' cy='115' r='4'/%3E%3Cpath class='d' d='M59 115h10M65 115v3M68 115v3'/%3E%3Cpath class='d' d='M55 160a5 5 0 015 5c0 4-5 10-5 10s-5-6-5-10a5 5 0 015-5z'/%3E%3Ccircle class='d' cx='55' cy='165' r='2'/%3E%3Crect class='d' x='120' y='85' width='12' height='16' rx='1'/%3E%3Cpath class='d' d='M123 91h6M123 95h4'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* Bubble tails */
+.bubble-tail-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-top: 0px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 8px solid #fff;
+}
+
+.bubble-tail-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border-top: 0px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 8px solid #303030;
+}
+
+/* Hide scrollbar in chat — must kill gutter on Windows Chrome */
+.hide-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
