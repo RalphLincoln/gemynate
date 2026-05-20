@@ -846,20 +846,20 @@ export function MessageBubble({
                     {/* Content Container */}
                     <div className="bg-white shadow-[0_1px_2px_rgba(0,0,0,0.12)]">
                         {/* Subheader */}
-                        <div className="px-[16px] pt-[12px]">
+                        <div className="px-[16px] pt-[14px]">
                             <div className="text-[13px] text-[#8c8c8c] uppercase tracking-wide">
                                 Your savings account
                             </div>
                         </div>
 
                         {/* Content */}
-                        <div className="px-[16px] py-[14px] space-y-[14px]">
+                        <div className="px-[16px] py-[14px] space-y-[16px]">
                             {/* Account Name */}
                             <div>
                                 <div className="text-[11px] text-[#8c8c8c] uppercase tracking-wide">
                                     Account name
                                 </div>
-                                <div className="text-[14.5px] font-medium text-[#111]">
+                                <div className="text-[15px] font-semibold text-[#111] mt-[2px]">
                                     {message.accountCard.accountName}
                                 </div>
                             </div>
@@ -869,7 +869,7 @@ export function MessageBubble({
                                 <div className="text-[11px] text-[#8c8c8c] uppercase tracking-wide">
                                     Account number
                                 </div>
-                                <div className="text-[16px] font-semibold text-[#111] tracking-wider">
+                                <div className="text-[20px] font-bold text-[#111] tracking-wider mt-[2px]">
                                     {message.accountCard.accountNumber}
                                 </div>
                             </div>
@@ -879,31 +879,25 @@ export function MessageBubble({
                                 <div className="text-[11px] text-[#8c8c8c] uppercase tracking-wide">
                                     Bank
                                 </div>
-                                <div className="text-[14.5px] font-medium text-[#111]">
+                                <div className="text-[15px] font-semibold text-[#111] mt-[2px]">
                                     {message.accountCard.bankName}
                                 </div>
                             </div>
 
-                            {/* Highlight - Uses plan color with 20% opacity background */}
+                            {/* Send prompt pill */}
                             <div
-                                className="rounded-[8px] px-[12px] py-[10px]"
+                                className="rounded-[10px] px-[14px] py-[10px] text-[13px] font-medium text-center"
                                 style={{
-                                    backgroundColor: `${message.color || '#c74a3a'}20`,
+                                    backgroundColor: `${message.color || '#c74a3a'}15`,
+                                    color: message.color || '#c74a3a',
                                 }}
                             >
-                                <div
-                                    className="text-[11px] leading-[18px]"
-                                    style={{
-                                        color: message.color || '#c74a3a',
-                                    }}
-                                >
-                                    Send {message.accountCard.weeklyAmount} this
-                                    week to stay on track
-                                </div>
+                                Send {message.accountCard.weeklyAmount} this
+                                week to stay on track
                             </div>
 
-                            {/* Payment methods */}
-                            <div className="text-[12px] text-[#8c8c8c]">
+                            {/* Payment methods inline */}
+                            <div className="text-[13px] text-[#8c8c8c] leading-[18px]">
                                 Pay by{' '}
                                 {message.accountCard.paymentMethods.join(', ')}
                             </div>
@@ -941,12 +935,13 @@ export function MessageBubble({
             {/* Dashboard Card with Dynamic Colors */}
             {isBot && message.dashboardCard && (
                 <div className="w-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] rounded-lg rounded-tl-[3px] overflow-hidden text-[14.5px] leading-[19px]">
-                    <div className="px-[16px] py-[12px] space-y-[3px]">
-                        {/* Header */}
+                    <div className="px-[16px] py-[12px] space-y-[10px]">
+                        {/* Header — Name */}
                         <div className="text-[14px] font-semibold text-[#111] leading-[20px]">
                             Hi {message.dashboardCard.userName}
                         </div>
 
+                        {/* BackUp status banner */}
                         <div
                             className="rounded-[8px] px-[10px] py-[10px] space-y-[2px]"
                             style={{
@@ -958,55 +953,51 @@ export function MessageBubble({
                                 className="text-[12px] font-semibold"
                                 style={{ color: message.color || '#c74a3a' }}
                             >
-                                Your BackUp is live from{' '}
-                                {message.dashboardCard.lockDate}
+                                BackUp is live from{' '}
+                                {message.dashboardCard.backupLiveDate}
                             </div>
                             <div className="text-[12px] text-[#555] leading-[16px]">
-                                Hospital cash, accident pay, and family support
-                                are covering you.
+                                {message.dashboardCard.protectionNote}
                             </div>
                         </div>
 
-                        {/* Plan Details */}
-                        <div className="space-y-[10px]">
-                            {/* Saved Amount and Goal */}
+                        {/* Goal + progress section */}
+                        <div className="space-y-[6px]">
+                            <div className="text-[12px] text-[#555]">
+                                Building toward{' '}
+                                {message.dashboardCard.goal.toLowerCase()}
+                            </div>
                             <div className="flex items-center justify-between">
-                                <div className="flex space-x-[2px]">
-                                    <div className="text-[11px] text-[#999] font-medium">
-                                        {message.dashboardCard.savedAmount.toLocaleString()}{' '}
-                                        saved
-                                    </div>
+                                <div className="text-[11px] text-[#999] font-medium">
+                                    ₦
+                                    {message.dashboardCard.savedAmount.toLocaleString()}{' '}
+                                    saved
                                 </div>
-                                <div className="text-right">
-                                    <div className="text-[11px] text-[#999] font-medium">
-                                        {message.dashboardCard.goalAmount.toLocaleString()}{' '}
-                                        goal
-                                    </div>
+                                <div className="text-[11px] text-[#999] font-medium">
+                                    ₦
+                                    {message.dashboardCard.goalAmount.toLocaleString()}{' '}
+                                    goal
                                 </div>
                             </div>
-
-                            {/* Progress Bar */}
-                            <div className="space-y-[6px]">
-                                <div className="w-full h-[6px] bg-[#e0e0e0] rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full rounded-full"
-                                        style={{
-                                            width: `${message.dashboardCard.progressPercent}%`,
-                                            backgroundColor:
-                                                message.color || '#c74a3a',
-                                        }}
-                                    />
-                                </div>
-                                <div className="text-[11px] text-[#8c8c8c]">
-                                    {message.dashboardCard.progressPercent}% —
-                                    keep going
-                                </div>
+                            <div className="w-full h-[6px] bg-[#e0e0e0] rounded-full overflow-hidden">
+                                <div
+                                    className="h-full rounded-full"
+                                    style={{
+                                        width: `${message.dashboardCard.progressPercent}%`,
+                                        backgroundColor:
+                                            message.color || '#c74a3a',
+                                    }}
+                                />
+                            </div>
+                            <div className="text-[11px] text-[#8c8c8c]">
+                                {message.dashboardCard.progressPercent}% — keep
+                                going
                             </div>
                         </div>
 
-                        {/* Timestamp */}
-                        <div className="text-right text-[11px] text-[#999]">
-                            {message.timestamp}
+                        {/* Lock status */}
+                        <div className="text-[11px] text-[#999]">
+                            🔒 Locked until {message.dashboardCard.lockDate}
                         </div>
                     </div>
 

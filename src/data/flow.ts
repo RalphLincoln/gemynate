@@ -39,16 +39,6 @@ export const flowSteps: Record<StepId, FlowStep> = {
             { label: "Yes, let's go! 🚀", action: 'ONBOARDING_CTA' },
         ],
     },
-    CLAIM_ACCIDENTAL_INJURY_FIRST: {
-        botMessages: [
-            "We are here with you. Please tell us what has happened.",
-        ],
-        quickReplies: [
-            { label: '🩺  I had an accident and need medical support', action: 'CLAIM_ACCIDENTAL_INJURY' },
-            { label: '🛑  I have a permanent disability from an accident', action: 'CLAIM_DISABILITY' },
-            { label: '💛  I am making a claim for a family member who has passed away', action: 'CLAIM_DEATH' },
-        ],
-    },
     ONBOARDING_CTA: {
         botMessages: [
             "Awesome! Let's get you set up. Complete your onboarding in 3 minutes.",
@@ -67,6 +57,25 @@ export const flowSteps: Record<StepId, FlowStep> = {
             {
                 label: '🔵 Sapphire — ₦1,000/day',
                 action: 'PLAN_SELECTED_SAPPHIRE',
+            },
+        ],
+    },
+    CLAIM_ACCIDENTAL_INJURY_FIRST: {
+        botMessages: [
+            'We are here with you. Please tell us what has happened.',
+        ],
+        quickReplies: [
+            {
+                label: '🩺  I had an accident and need medical support',
+                action: 'CLAIM_ACCIDENTAL_INJURY',
+            },
+            {
+                label: '🛑  I have a permanent disability from an accident',
+                action: 'CLAIM_DISABILITY',
+            },
+            {
+                label: '💛  I am making a claim for a family member who has passed away',
+                action: 'CLAIM_DEATH',
             },
         ],
     },

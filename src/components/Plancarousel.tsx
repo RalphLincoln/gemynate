@@ -4,11 +4,10 @@ export interface Plan {
     id: string;
     name: string;
     color: string;
-    hospitalCash: string;
-    accidentCompensation: string;
-    familySupport: string;
-    savings: string;
-    weeklyAmount: string;
+    savingsGoal: string;
+    medicalCoverage: string;
+    nextOfKin: string;
+    contribution: string;
 }
 
 interface PlanCarouselProps {
@@ -36,7 +35,7 @@ export function PlanCarousel({ plans, onSelectPlan }: PlanCarouselProps) {
                 <div
                     key={plan.id}
                     className="flex-shrink-0 snap-start"
-                    style={{ width: '280px' }}
+                    style={{ width: '260px' }}
                 >
                     <PlanCard plan={plan} onSelect={onSelectPlan} />
                 </div>
@@ -53,83 +52,68 @@ interface PlanCardProps {
 function PlanCard({ plan, onSelect }: PlanCardProps) {
     return (
         <div
-            className="rounded-[16px] border-2 flex flex-col gap-[16px] bg-white"
+            className="rounded-[16px] border-2 flex flex-col bg-white overflow-hidden"
             style={{ borderColor: plan.color }}
         >
             {/* Header */}
             <div
-                className="rounded-t-[12px] px-[16px] py-[12px] text-white"
+                className="px-[16px] py-[12px] text-white"
                 style={{ backgroundColor: plan.color }}
             >
-                <h3 className="text-[16px] font-semibold">{plan.name}</h3>
+                <h3 className="text-[15px] font-semibold">{plan.name}</h3>
             </div>
 
             {/* Content */}
-            <div className="space-y-[14px] px-[15px]">
-                {/* Hospital Cash */}
-                <div>
-                    <div className="text-[13px] text-[#888] font-medium mb-[4px]">
-                        If admitted to hospital
-                    </div>
-                    <div
-                        className="text-[16px] font-semibold"
-                        style={{ color: plan.color }}
-                    >
-                        {plan.hospitalCash}/night
-                    </div>
+            <div className="px-[16px] py-[14px] space-y-[12px] flex-1">
+                {/* Savings Goal */}
+                <div className="flex items-start gap-[8px]">
+                    <span className="text-[14px] mt-[1px]">💰</span>
+                    <p className="text-[13px] leading-[18px] text-gray-700">
+                        Build{' '}
+                        <span className="font-semibold">
+                            {plan.savingsGoal}
+                        </span>{' '}
+                        toward your goal
+                    </p>
                 </div>
 
-                {/* Accident Compensation */}
-                <div>
-                    <div className="text-[13px] text-[#888] font-medium mb-[4px]">
-                        If accident stops you working
-                    </div>
-                    <div
-                        className="text-[16px] font-semibold"
-                        style={{ color: plan.color }}
-                    >
-                        {plan.accidentCompensation} paid
-                    </div>
+                {/* Medical Coverage */}
+                <div className="flex items-start gap-[8px]">
+                    <span className="text-[14px] mt-[1px]">🏥</span>
+                    <p className="text-[13px] leading-[18px] text-gray-700">
+                        {plan.medicalCoverage}
+                    </p>
                 </div>
 
-                {/* Family Support */}
-                <div>
-                    <div className="text-[13px] text-[#888] font-medium mb-[4px]">
-                        Family support
-                    </div>
-                    <div
-                        className="text-[16px] font-semibold"
-                        style={{ color: plan.color }}
-                    >
-                        {plan.familySupport}
-                    </div>
+                {/* Next of Kin */}
+                <div className="flex items-start gap-[8px]">
+                    <span className="text-[14px] mt-[1px]">👨‍👩‍👧</span>
+                    <p className="text-[13px] leading-[18px] text-gray-700">
+                        Next of kin support:{' '}
+                        <span className="font-semibold">{plan.nextOfKin}</span>{' '}
+                        + your savings
+                    </p>
                 </div>
 
-                {/* Savings Info */}
-                <div className="border-y py-1">
-                    <div className="text-[12px] leading-[18px] text-gray-400">
-                        You also build
-                    </div>
-                    <div className="text-[15px] font-semibold mt-[2px] text-gray-800">
-                        {plan.savings} toward your goal
-                    </div>
-                    <div className="text-[12px] mt-[4px] text-gray-400">
-                        Save {plan.weeklyAmount}/week
-                    </div>
+                {/* Contribution */}
+                <div className="flex items-start gap-[8px]">
+                    <span className="text-[14px] mt-[1px]">📅</span>
+                    <p className="text-[13px] leading-[18px] text-gray-700">
+                        {plan.contribution}
+                    </p>
                 </div>
             </div>
 
             {/* Choose Button */}
-            <button
-                onClick={() => onSelect(plan.id)}
-                className="w-full py-[12px] rounded-[12px] font-semibold text-[14px] transition-colors active:opacity-80"
-                style={{
-                    color: plan.color,
-                    borderBottom: `2px solid ${plan.color}`,
-                }}
-            >
-                Choose this plan
-            </button>
+            <div className="px-[16px] pb-[14px]">
+                <button
+                    onClick={() => onSelect(plan.id)}
+                    className="w-full py-[10px] rounded-[10px] font-semibold text-[13px] transition-colors active:opacity-80 text-white"
+                    style={{ backgroundColor: plan.color }}
+                >
+                    Choose this plan
+                </button>
+            </div>
         </div>
     );
 }

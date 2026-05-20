@@ -86,31 +86,18 @@ function computeContributions(plan: PlanTier | null, months: number) {
 }
 
 export const CLAIM_NEXT_STEP: Partial<Record<StepIdV2, StepIdV2>> = {
-    CLAIM_STILL_ADMITTED: 'CLAIM_ADMITTED_STEP2',
-    CLAIM_ADMITTED_STEP2: 'CLAIM_ADMITTED_STEP3',
-    CLAIM_ADMITTED_STEP3: 'CLAIM_ADMITTED_STEP4',
-    CLAIM_ADMITTED_STEP4: 'CLAIM_ADMITTED_CONFIRM',
-    CLAIM_DISCHARGED: 'CLAIM_DISCHARGED_STEP2',
-    CLAIM_DISCHARGED_STEP3: 'CLAIM_DISCHARGED_STEP4',
-    CLAIM_DISCHARGED_STEP4: 'CLAIM_DISCHARGED_CONFIRM',
     CLAIM_ACCIDENTAL_INJURY: 'CLAIM_INJURY_STEP2',
     CLAIM_INJURY_STEP2: 'CLAIM_INJURY_STEP3',
-    CLAIM_INJURY_STEP3: 'CLAIM_INJURY_CONFIRM',
+    CLAIM_INJURY_STEP3: 'CLAIM_INJURY_SUBMITTED',
     CLAIM_DISABILITY: 'CLAIM_DISABILITY_STEP2',
     CLAIM_DISABILITY_STEP2: 'CLAIM_DISABILITY_STEP3',
-    CLAIM_DISABILITY_STEP3: 'CLAIM_DISABILITY_CONFIRM',
+    CLAIM_DISABILITY_STEP3: 'CLAIM_DISABILITY_SUBMITTED',
     CLAIM_DEATH: 'CLAIM_DEATH_STEP2',
     CLAIM_DEATH_STEP2: 'CLAIM_DEATH_STEP3',
-    CLAIM_DEATH_STEP3: 'CLAIM_DEATH_CONFIRM',
+    CLAIM_DEATH_STEP3: 'CLAIM_DEATH_SUBMITTED',
 };
 
 export const CLAIM_PREV_STEP: Partial<Record<StepIdV2, StepIdV2>> = {
-    CLAIM_ADMITTED_STEP2: 'CLAIM_STILL_ADMITTED',
-    CLAIM_ADMITTED_STEP3: 'CLAIM_ADMITTED_STEP2',
-    CLAIM_ADMITTED_STEP4: 'CLAIM_ADMITTED_STEP3',
-    CLAIM_DISCHARGED_STEP2: 'CLAIM_DISCHARGED',
-    CLAIM_DISCHARGED_STEP3: 'CLAIM_DISCHARGED_STEP2',
-    CLAIM_DISCHARGED_STEP4: 'CLAIM_DISCHARGED_STEP3',
     CLAIM_INJURY_STEP2: 'CLAIM_ACCIDENTAL_INJURY',
     CLAIM_INJURY_STEP3: 'CLAIM_INJURY_STEP2',
     CLAIM_DISABILITY_STEP2: 'CLAIM_DISABILITY',
@@ -281,7 +268,7 @@ export function useConversationV2() {
             // --- Dynamic: WELCOME ---
             if (stepId === 'WELCOME') {
                 const welcomeMsg =
-                    'Welcome to *Gemynate*! 👋\n\nLife can change suddenly. One accident or emergency can empty savings or affect business and family plans.\n\nGemynate helps you build toward your big goals like school fees, rent, or business, while giving you financial protection when emergencies happen.';
+                    'Welcome to Gemynate! 👋\nLife can change suddenly. One accident or emergency can empty savings or affect business and family plans.\n\nGemynate helps you build toward your big goals like school fees, rent, or business, while giving you financial protection when emergencies happen.';
 
                 next = await addBotMessages([welcomeMsg], next);
 
@@ -299,7 +286,7 @@ export function useConversationV2() {
                     text: '',
                     timestamp: timeNow(),
                     voiceNote: {
-                        duration: 45,
+                        duration: 37,
                         audioSrc: '/audio/welcome-voice.wav',
                     },
                 };
@@ -327,7 +314,7 @@ export function useConversationV2() {
                     });
                 });
 
-                next = await addBotMessages(['Ready to start?'], next);
+                next = await addBotMessages(['Ready to get started?'], next);
 
                 next = attachButtons(next, {
                     quickReplies: [
@@ -348,6 +335,13 @@ export function useConversationV2() {
                 const goal = userText || 'My goal';
                 next = { ...next, selectedGoal: goal };
 
+                next = await addBotMessages(
+                    [
+                        'Choose the protection plan that works best for you. Swipe left or right to see more options. \u{1F447}',
+                    ],
+                    next
+                );
+
                 const carouselMsg: Message = {
                     id: makeId(),
                     type: 'bot',
@@ -356,35 +350,38 @@ export function useConversationV2() {
                     carousel: [
                         {
                             id: 'ruby',
-                            name: 'Ruby protection',
+                            name: 'Ruby BackUp Plan',
                             color: '#E53935',
-                            hospitalCash: '10,000',
-                            accidentCompensation: '50,000',
-                            familySupport: '1 million',
-                            savings: '60,000',
-                            weeklyAmount: '1,250',
+                            savingsGoal: '₦90,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦200,000',
+                            contribution:
+                                'Contribute ₦1,850 weekly or pay small daily',
                             action: 'PLAN_DETAILS_RUBY',
                         },
                         {
                             id: 'emerald',
-                            name: 'Emerald protection',
+                            name: 'Emerald BackUp Plan',
                             color: '#43A047',
-                            hospitalCash: '20,000',
-                            accidentCompensation: '100,000',
-                            familySupport: '1 million',
-                            savings: '120,000',
-                            weeklyAmount: '2,500',
+                            savingsGoal: '₦120,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦250,000',
+                            contribution:
+                                'Contribute ₦2,500 weekly or pay small daily',
                             action: 'PLAN_DETAILS_EMERALD',
                         },
                         {
                             id: 'sapphire',
-                            name: 'Sapphire protection',
+                            name: 'Sapphire BackUp Plan',
                             color: '#1E88E5',
-                            hospitalCash: '40,000',
-                            accidentCompensation: '200,000',
-                            familySupport: '1 million',
-                            savings: '240,000',
-                            weeklyAmount: '5,000',
+                            savingsGoal: '₦240,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦300,000',
+                            contribution:
+                                'Contribute ₦5,000 weekly or pay small daily',
                             action: 'PLAN_DETAILS_SAPPHIRE',
                         },
                     ],
@@ -409,40 +406,43 @@ export function useConversationV2() {
                 const carouselMsg: Message = {
                     id: makeId(),
                     type: 'bot',
-                    text: 'Choose the protection plan that works best for you. Swipe left or right to see more options. 👇',
+                    text: 'Choose the protection plan that works best for you. Swipe left or right to see more options. \u{1F447}',
                     timestamp: timeNow(),
                     carousel: [
                         {
                             id: 'ruby',
-                            name: 'Ruby protection',
+                            name: 'Ruby BackUp Plan',
                             color: '#E53935',
-                            hospitalCash: '10,000',
-                            accidentCompensation: '50,000',
-                            familySupport: '1 million',
-                            savings: '60,000',
-                            weeklyAmount: '1,250',
+                            savingsGoal: '₦90,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦200,000',
+                            contribution:
+                                'Contribute ₦1,850 weekly or pay small daily',
                             action: 'PLAN_DETAILS_RUBY',
                         },
                         {
                             id: 'emerald',
-                            name: 'Emerald protection',
+                            name: 'Emerald BackUp Plan',
                             color: '#43A047',
-                            hospitalCash: '20,000',
-                            accidentCompensation: '100,000',
-                            familySupport: '1 million',
-                            savings: '120,000',
-                            weeklyAmount: '2,500',
+                            savingsGoal: '₦120,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦250,000',
+                            contribution:
+                                'Contribute ₦2,500 weekly or pay small daily',
                             action: 'PLAN_DETAILS_EMERALD',
                         },
                         {
                             id: 'sapphire',
-                            name: 'Sapphire protection',
+                            name: 'Sapphire BackUp Plan',
                             color: '#1E88E5',
-                            hospitalCash: '40,000',
-                            accidentCompensation: '200,000',
-                            familySupport: '1 million',
-                            savings: '240,000',
-                            weeklyAmount: '5,000',
+                            savingsGoal: '₦240,000',
+                            medicalCoverage:
+                                'Medical expenses from an accident covered (once a year)',
+                            nextOfKin: '₦300,000',
+                            contribution:
+                                'Contribute ₦5,000 weekly or pay small daily',
                             action: 'PLAN_DETAILS_SAPPHIRE',
                         },
                     ],
@@ -473,21 +473,15 @@ export function useConversationV2() {
                     tier === 'ruby'
                         ? 'Ruby'
                         : tier === 'emerald'
-                            ? 'Emerald'
-                            : 'Sapphire';
+                          ? 'Emerald'
+                          : 'Sapphire';
 
                 next = { ...next, selectedPlan: tier };
 
-                const goalLabel =
-                    next.selectedGoal?.replace(/^[^\w]*\s*/, '') || 'your goal';
-
-                const familyStr =
-                    benefits.familySupport >= 1000000
-                        ? `₦${benefits.familySupport / 1000000} million`
-                        : `₦${benefits.familySupport.toLocaleString()}`;
+                const familyStr = `₦${benefits.familySupport.toLocaleString()}`;
 
                 const msgs = [
-                    `You selected the *${planLabel} BackUp Plan* 👍\n\n💰 *₦${benefits.monthlyAmount.toLocaleString()} monthly*\nContribute daily or weekly.\n\n🎯 You will receive *₦${benefits.savingsTarget.toLocaleString()} guaranteed after 12 months* + a Completion Bonus 🎁\n\n🛡️ *Stay protected throughout the year*\n\n• Get support for accidental medical expenses once every year\n• If the worst happens, up to *${familyStr}* + your savings will be paid to your next of kin\n\n👉 Ready to start?`,
+                    `You selected the ${planLabel} BackUp Plan 👍\n\n₦${benefits.monthlyAmount.toLocaleString()} monthly. Contribute daily or weekly.\n\nYou will receive ₦${benefits.savingsTarget.toLocaleString()} guaranteed after 12 months + a Completion Bonus 🎁\n\nStay protected throughout the year. Accidental medical expenses support is provided once per year. Also, up to ${familyStr} plus the amount you saved is paid to your next of kin if the worst happens.\n\nReady to start?`,
                 ];
 
                 next = await addBotMessages(msgs, next);
@@ -557,7 +551,7 @@ export function useConversationV2() {
             // --- Dynamic: AUTO_DEBIT_SETUP ---
             if (stepId === 'AUTO_DEBIT_SETUP') {
                 const msgs = [
-                    'Good choice 👍\n\nAutoSave helps you save little by little automatically so you stay on track with your goal.\n\n👇 Tap below to securely link your bank account.',
+                    'Good choice 👍\n\nAutoSave helps you save little by little automatically, so you keep your protection plan active and stay on track with your goal.\n\n👇 Tap below to securely link your bank account.',
                 ];
                 next = await addBotMessages(msgs, next);
                 next = attachButtons(next, {
@@ -590,7 +584,7 @@ export function useConversationV2() {
                     ? `₦${benefits.weeklyAmount.toLocaleString()}`
                     : '';
 
-                const introMsg = `Great 👍\n\nHere are your account details.\nSave or screenshot this to pay anytime.`;
+                const introMsg = `Great 👍\nHere is your personal Gemynate account for savings payments:`;
                 next = await addBotMessages([introMsg], next);
 
                 const planColor = PLAN_COLORS[next.selectedPlan || 'ruby'];
@@ -610,11 +604,10 @@ export function useConversationV2() {
                             next.selectedPlan === 'ruby'
                                 ? 'Ruby Plan'
                                 : next.selectedPlan === 'emerald'
-                                    ? 'Emerald Plan'
-                                    : 'Sapphire Plan',
-                        paymentMethods: ['bank transfer', 'USSD', 'POS'],
-                        disclaimer:
-                            'Deposits are held by X Microfinance Bank, a licensed microfinance bank by the Central Bank of Nigeria',
+                                  ? 'Emerald Plan'
+                                  : 'Sapphire Plan',
+                        paymentMethods: ['Bank transfer', 'USSD', 'POS'],
+                        disclaimer: '',
                     },
                 };
 
@@ -644,7 +637,7 @@ export function useConversationV2() {
                     statusLine = `\n\n📌 *Payment Method:* Manual Transfer`;
                 }
 
-                const msg = `Transfer to your virtual account to fund your savings:\n\n👤 Name: *${userName}*\n🏦 Bank: *X Microfinance Bank*\n💳 Account Number: *${acctNum}*\n\nDeposits are held by X Microfinance Bank, a licensed microfinance bank by the Central Bank of Nigeria.${statusLine}`;
+                const msg = `Transfer to your virtual account to fund your plan:\n\n👤 Name: *${userName}*\n🏦 Bank: *X Microfinance Bank*\n💳 Account Number: *${acctNum}*\n\nDeposits are held by X Microfinance Bank, a licensed microfinance bank by the Central Bank of Nigeria.${statusLine}`;
 
                 next = await addBotMessages([msg], next);
 
@@ -673,7 +666,7 @@ export function useConversationV2() {
             // --- Dynamic: FUND_ACCOUNT_LINK ---
             if (stepId === 'FUND_ACCOUNT_LINK') {
                 const linkMsg =
-                    'Good choice 👍\n\nAutoSave helps you save little by little automatically so you stay on track with your goal.\n\n👇 Tap below to securely link your bank account.';
+                    'Good choice 👍\n\nAutoSave helps you save little by little automatically, so you keep your protection plan active and stay on track with your goal.\n\n👇 Tap below to securely link your bank account.';
                 next = await addBotMessages([linkMsg], next);
                 next = { ...next, paymentMethod: 'auto-debit' };
                 persist(next);
@@ -708,20 +701,20 @@ export function useConversationV2() {
                     next.selectedPlan === 'ruby'
                         ? 'Ruby'
                         : next.selectedPlan === 'emerald'
-                            ? 'Emerald'
-                            : next.selectedPlan === 'sapphire'
-                                ? 'Sapphire'
-                                : '';
+                          ? 'Emerald'
+                          : next.selectedPlan === 'sapphire'
+                            ? 'Sapphire'
+                            : '';
                 const isAutoDebit = next.paymentMethod === 'auto-debit';
 
                 let msgs: string[];
                 if (isAutoDebit) {
                     msgs = [
-                        `AutoSave Linked! 🎊 Your first payment was successful, and your *${planLabel} Plan* is live.\n\nHere is what happens next:\n\n✅ Your *AutoSave* runs automatically.\n\nYour Insurance BackUp fully activates after exactly 30 days of consistent savings.\n\nYou can check your progress or make a claim at any time from your Dashboard.`,
+                        `AutoSave linked! 🎉\nYour ${planLabel} BackUp Plan is live.\n\n✅ Savings run automatically\n🛡️ Your Backup activates 30 days after completing your monthly contribution goal\n📊 Track your savings or make a claim from your Dashboard.`,
                     ];
                 } else {
                     msgs = [
-                        `Your *${planLabel} Plan* is live! 🎊\n\nTransfer your weekly amount to your virtual account whenever you have cash. We will track every deposit automatically.\n\nYour *Insurance BackUp* fully activates after your first successful payment is held for *30 days*.\n\nOpen your dashboard to track your savings.`,
+                        `Your ${planLabel} BackUp Plan is live! 🎉\n\n✅ Make your first transfer to activate\n🛡️ Your Backup activates 30 days after completing your monthly contribution goal\n📊 Track your savings or make a claim from your Dashboard.`,
                     ];
                 }
 
@@ -745,37 +738,32 @@ export function useConversationV2() {
                 const benefits = next.selectedPlan
                     ? PLAN_BENEFITS_V2[next.selectedPlan]
                     : null;
+                const target = benefits?.savingsTarget || 0;
+                const userName = next.user
+                    ? `${next.user.firstName} ${next.user.lastName}`
+                    : 'User';
                 const planLabel =
                     next.selectedPlan === 'ruby'
-                        ? 'Ruby Plan'
+                        ? 'Ruby BackUp Plan'
                         : next.selectedPlan === 'emerald'
-                            ? 'Emerald Plan'
-                            : next.selectedPlan === 'sapphire'
-                                ? 'Sapphire Plan'
-                                : '';
-                const target = benefits?.savingsTarget || 0;
-                const progress =
-                    target > 0
-                        ? Math.min(
-                            Math.round((contrib.totalSaved / target) * 100),
-                            100
-                        )
-                        : 0;
-                const userName = next.user ? next.user.firstName : 'User';
+                          ? 'Emerald BackUp Plan'
+                          : 'Sapphire BackUp Plan';
                 const goalLabel =
-                    next.selectedGoal?.replace(/^[^\w]*\s*/, '') || 'your goal';
+                    next.selectedGoal?.replace(/^[^\w]*\s*/, '') || 'Your goal';
 
                 const lockDate = new Date();
                 lockDate.setMonth(lockDate.getMonth() + 12);
-                const lockDateStr = lockDate.toLocaleDateString('en-US', {
+                const lockDateStr = lockDate.toLocaleDateString('en-GB', {
                     month: 'long',
                     year: 'numeric',
                 });
 
-                const daysUntilActive = Math.max(
-                    0,
-                    30 - contrib.monthsActive * 30
-                );
+                const backupDate = new Date();
+                backupDate.setDate(backupDate.getDate() + 30);
+                const backupDateStr = backupDate.toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                });
 
                 const planColor = PLAN_COLORS[next.selectedPlan || 'ruby'];
 
@@ -789,18 +777,27 @@ export function useConversationV2() {
                         userName,
                         planName: planLabel,
                         goal: goalLabel,
-                        savedAmount: contrib.totalSaved,
                         goalAmount: target,
-                        progressPercent: progress,
+                        savedAmount: contrib.totalSaved,
+                        progressPercent:
+                            target > 0
+                                ? Math.min(
+                                      Math.round(
+                                          (contrib.totalSaved / target) * 100
+                                      ),
+                                      100
+                                  )
+                                : 0,
                         lockDate: lockDateStr,
-                        daysUntilActive,
+                        backupLiveDate: backupDateStr,
+                        protectionNote:
+                            'Accidental injury support and family support',
                     },
                 };
                 next = {
                     ...next,
                     chatHistory: [...next.chatHistory, dashboardMsg],
                 };
-                persist(next);
 
                 next = attachButtons(next, step);
                 persist(next);
@@ -819,151 +816,10 @@ export function useConversationV2() {
                 return;
             }
 
-            // --- Dynamic: CLAIM_ADMITTED_CONFIRM ---
-            if (stepId === 'CLAIM_ADMITTED_CONFIRM') {
-                const nights = next.claimNights || 0;
-                const benefits = next.selectedPlan
-                    ? PLAN_BENEFITS_V2[next.selectedPlan]
-                    : null;
-                const perNight = benefits?.hospitalCashPerNight || 0;
-                const estimate = perNight * nights;
-
-                const msg = `📋 *Claim Summary*\n\n🏥 Type: Hospital Cash (Still Admitted)\n🏨 Hospital: Mainland Clinic\n🛏️ Nights so far: *${nights}*\n💰 Estimated payout: *₦${estimate.toLocaleString()}*\n\nPlease confirm to submit your claim.`;
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, {
-                    quickReplies: [
-                        {
-                            label: 'Confirm & Submit ✅',
-                            action: 'CLAIM_ADMITTED_SUBMITTED',
-                        },
-                        { label: 'Cancel Claim 🔙', action: 'DASHBOARD_MENU' },
-                    ],
-                });
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_DISCHARGED_CONFIRM ---
-            if (stepId === 'CLAIM_DISCHARGED_CONFIRM') {
-                const nights = next.claimNights || 0;
-                const benefits = next.selectedPlan
-                    ? PLAN_BENEFITS_V2[next.selectedPlan]
-                    : null;
-                const perNight = benefits?.hospitalCashPerNight || 0;
-                const estimate = perNight * nights;
-
-                const msg = `📋 *Claim Summary*\n\n🏥 Type: Hospital Cash (Discharged)\n🏨 Hospital: Mainland Clinic\n🛏️ Total nights: *${nights}*\n💰 Estimated payout: *₦${estimate.toLocaleString()}*\n\nPlease confirm to submit your claim.`;
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, {
-                    quickReplies: [
-                        {
-                            label: 'Confirm & Submit ✅',
-                            action: 'CLAIM_DISCHARGED_SUBMITTED',
-                        },
-                        { label: 'Cancel Claim 🔙', action: 'DASHBOARD_MENU' },
-                    ],
-                });
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_INJURY_CONFIRM ---
-            if (stepId === 'CLAIM_INJURY_CONFIRM') {
-                const benefits = next.selectedPlan
-                    ? PLAN_BENEFITS_V2[next.selectedPlan]
-                    : null;
-                const hustleCover = benefits?.hustleCover || 0;
-
-                const msg = `📋 *Claim Summary*\n\n🛡️ Type: Hustle Cover (Accidental Injury)\n📎 Treatment proof + description uploaded\n💰 Cover up to: *₦${hustleCover.toLocaleString()}*\n\nPlease confirm to submit your claim.`;
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, {
-                    quickReplies: [
-                        {
-                            label: 'Confirm & Submit ✅',
-                            action: 'CLAIM_INJURY_SUBMITTED',
-                        },
-                        { label: 'Cancel Claim 🔙', action: 'DASHBOARD_MENU' },
-                    ],
-                });
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_DISABILITY_CONFIRM ---
-            if (stepId === 'CLAIM_DISABILITY_CONFIRM') {
-                const benefits = next.selectedPlan
-                    ? PLAN_BENEFITS_V2[next.selectedPlan]
-                    : null;
-                const hustleCover = benefits?.hustleCover || 0;
-
-                const msg = `📋 *Claim Summary*\n\n🛑 Type: Permanent Disability\n📎 Medical confirmation + accident details uploaded\n💰 Cover up to: *₦${hustleCover.toLocaleString()}*\n\nPlease confirm to submit your claim.`;
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, {
-                    quickReplies: [
-                        {
-                            label: 'Confirm & Submit ✅',
-                            action: 'CLAIM_DISABILITY_SUBMITTED',
-                        },
-                        { label: 'Cancel Claim 🔙', action: 'DASHBOARD_MENU' },
-                    ],
-                });
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_DEATH_CONFIRM ---
-            if (stepId === 'CLAIM_DEATH_CONFIRM') {
-                const benefits = next.selectedPlan
-                    ? PLAN_BENEFITS_V2[next.selectedPlan]
-                    : null;
-                const familySupport = benefits?.familySupport || 0;
-
-                const msg = `📋 *Claim Summary*\n\n💛 Type: Family Support Claim\n📎 Death certificate + ID proof + identity verification uploaded\n💰 Family support payout: *₦${familySupport.toLocaleString()}*\n\nPlease confirm to submit your claim.`;
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, {
-                    quickReplies: [
-                        {
-                            label: 'Confirm & Submit ✅',
-                            action: 'CLAIM_DEATH_SUBMITTED',
-                        },
-                        { label: 'Cancel Claim 🔙', action: 'DASHBOARD_MENU' },
-                    ],
-                });
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_ADMITTED_SUBMITTED ---
-            if (stepId === 'CLAIM_ADMITTED_SUBMITTED') {
-                const msg =
-                    'Verification complete! ✅\n\nYour claim has been submitted. Our team will review your details and get back to you right here within 24 hours.\n\nWe wish you a speedy recovery!';
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, step);
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
-            // --- Dynamic: CLAIM_DISCHARGED_SUBMITTED ---
-            if (stepId === 'CLAIM_DISCHARGED_SUBMITTED') {
-                const msg =
-                    'Verification complete! ✅\n\nYour full claim has been submitted. Our team will review your discharge documents and get back to you within 24 hours.\n\nTake time to rest!';
-                next = await addBotMessages([msg], next);
-                next = attachButtons(next, step);
-                persist(next);
-                busyRef.current = false;
-                return;
-            }
-
             // --- Dynamic: CLAIM_INJURY_SUBMITTED ---
             if (stepId === 'CLAIM_INJURY_SUBMITTED') {
                 const msg =
-                    'Verification complete! ✅\n\nYour accident claim has been submitted successfully. Our team will review your documents and reach out right here within 24 hours to process your cash support.\n\nStay safe!';
+                    'Your claim has been submitted ✅\n\nWe will review your documents and come back to you here within 24 hours to process your payment.\n\nTake care of yourself.';
                 next = await addBotMessages([msg], next);
                 next = attachButtons(next, step);
                 persist(next);
@@ -974,7 +830,7 @@ export function useConversationV2() {
             // --- Dynamic: CLAIM_DISABILITY_SUBMITTED ---
             if (stepId === 'CLAIM_DISABILITY_SUBMITTED') {
                 const msg =
-                    'Verification complete! ✅\n\nYour disability claim has been submitted successfully. Our team will review your documents and reach out right here within 24 hours to process your payment.\n\nWe are with you.';
+                    'Your claim has been submitted. ✅\n\nWe know how much is at stake right now. Our team will review everything carefully and reach you here within 24 hours to confirm next steps.';
                 next = await addBotMessages([msg], next);
                 next = attachButtons(next, step);
                 persist(next);
@@ -984,8 +840,13 @@ export function useConversationV2() {
 
             // --- Dynamic: CLAIM_DEATH_SUBMITTED ---
             if (stepId === 'CLAIM_DEATH_SUBMITTED') {
-                const msg =
-                    'Verification complete! ✅\n\nYour claim has been submitted successfully. Our team will review your documents and reach out right here within 24 hours to process the family support payment.\n\nOur deepest condolences are with you.';
+                const benefits = next.selectedPlan
+                    ? PLAN_BENEFITS_V2[next.selectedPlan]
+                    : null;
+                const familyStr = benefits
+                    ? `₦${benefits.familySupport.toLocaleString()}`
+                    : '₦200,000';
+                const msg = `Your claim has been submitted. 💛\n\nWe are so sorry again for your loss. Our team will review everything and reach you here within 24 hours to process the family support payment of ${familyStr} and the amount saved.\n\nWe are with you.`;
                 next = await addBotMessages([msg], next);
                 next = attachButtons(next, step);
                 persist(next);
@@ -995,33 +856,8 @@ export function useConversationV2() {
 
             // --- Dynamic: POLICY_DETAILS ---
             if (stepId === 'POLICY_DETAILS') {
-                const msg = 'Tap an action below:';
-                next = {
-                    ...next,
-                    chatHistory: [
-                        ...next.chatHistory,
-                        {
-                            id: makeId(),
-                            type: 'bot',
-                            text: msg,
-                            timestamp: timeNow(),
-                        },
-                    ],
-                };
-
-                next = attachButtons(next, {
-                    quickReplies: [
-                        { label: 'Fund My Account 💳', action: 'FUND_ACCOUNT' },
-                        { label: 'Claim from BackUp 🏥', action: 'CLAIM_FLOW' },
-                        {
-                            label: 'View BackUp Policy 📋',
-                            action: 'POLICY_DETAILS',
-                        },
-                        { label: 'Talk to Support 🎧', action: 'SUPPORT' },
-                    ],
-                });
                 persist(next);
-                setActiveSheet('policyDetails');
+                setActiveSheet('policy');
                 busyRef.current = false;
                 return;
             }
@@ -1077,8 +913,8 @@ export function useConversationV2() {
                 const imagePath = file
                     ? URL.createObjectURL(file)
                     : claimAction === 'upload_discharge'
-                        ? '/claims/discharge-summary.jpg'
-                        : '/claims/admission-letter.jpg';
+                      ? '/claims/discharge-summary.jpg'
+                      : '/claims/admission-letter.jpg';
                 const msgId = makeId();
                 const uploadingMsg: Message = {
                     id: msgId,
@@ -1105,10 +941,10 @@ export function useConversationV2() {
                     chatHistory: next.chatHistory.map((m) =>
                         m.id === msgId
                             ? {
-                                ...m,
-                                text: '📎 Photo uploaded',
-                                uploading: false,
-                            }
+                                  ...m,
+                                  text: '📎 Photo uploaded',
+                                  uploading: false,
+                              }
                             : m
                     ),
                 };
@@ -1185,8 +1021,8 @@ export function useConversationV2() {
                 const imagePath = file
                     ? URL.createObjectURL(file)
                     : isDischargedPath
-                        ? '/claims/selfie-discharged.jpg'
-                        : '/claims/selfie.jpg';
+                      ? '/claims/selfie-discharged.jpg'
+                      : '/claims/selfie.jpg';
                 const msgId = makeId();
                 const uploadingMsg: Message = {
                     id: msgId,
@@ -1213,10 +1049,10 @@ export function useConversationV2() {
                     chatHistory: next.chatHistory.map((m) =>
                         m.id === msgId
                             ? {
-                                ...m,
-                                text: '📸 Selfie captured',
-                                uploading: false,
-                            }
+                                  ...m,
+                                  text: '📸 Selfie captured',
+                                  uploading: false,
+                              }
                             : m
                     ),
                 };

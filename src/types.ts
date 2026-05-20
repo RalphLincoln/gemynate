@@ -2,11 +2,10 @@ export interface CarouselCard {
     id: string;
     name: string;
     color: string;
-    hospitalCash: string;
-    accidentCompensation: string;
-    familySupport: string;
-    savings: string;
-    weeklyAmount: string;
+    savingsGoal: string;
+    medicalCoverage: string;
+    nextOfKin: string;
+    contribution: string;
     action: string;
 }
 
@@ -40,11 +39,12 @@ export interface Message {
         userName: string;
         planName: string;
         goal: string;
-        savedAmount: number;
         goalAmount: number;
+        savedAmount: number;
         progressPercent: number;
         lockDate: string;
-        daysUntilActive: number;
+        backupLiveDate: string;
+        protectionNote: string;
     };
 }
 

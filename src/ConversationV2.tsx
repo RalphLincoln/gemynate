@@ -7,9 +7,9 @@ import { InputBar } from './components/InputBar';
 import { OnboardingSheetV2 } from './sheets/OnboardingSheetV2';
 import { BankLinkingSheet } from './sheets/BankLinkingSheet';
 import { ClaimNightsSheet } from './sheets/ClaimNightsSheet';
+import { PolicyDetailsSheet } from './sheets/PolicyDetailsSheet';
 import { FeedbackSheet } from './sheets/FeedbackSheet';
 import type { SheetType } from './types';
-import { PolicyDetailsSheet } from './sheets/PolicyDetailsSheet.tsx';
 
 export function ConversationV2() {
     const {
@@ -103,10 +103,13 @@ export function ConversationV2() {
                         existingData={state.bankDetails}
                     />
                 )}
-                {activeSheet === 'policyDetails' && state.selectedPlan && (
+                {activeSheet === 'policy' && (
                     <PolicyDetailsSheet
                         selectedPlan={state.selectedPlan}
-                        onClose={closeSheet}
+                        onClose={() => {
+                            closeSheet();
+                            goToStep('DASHBOARD_MENU');
+                        }}
                     />
                 )}
                 {feedbackOpen && (

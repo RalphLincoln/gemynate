@@ -24,35 +24,18 @@ export type StepIdV2 =
     | 'POLICY_DETAILS'
     | 'POLICY_PDF'
     | 'CLAIM_FLOW'
-    | 'CLAIM_HOSPITAL'
-    | 'CLAIM_STILL_ADMITTED'
-    | 'CLAIM_ADMITTED_STEP2'
-    | 'CLAIM_ADMITTED_STEP3'
-    | 'CLAIM_ADMITTED_STEP4'
-    | 'CLAIM_ADMITTED_CONFIRM'
-    | 'CLAIM_ADMITTED_SUBMITTED'
-    | 'CLAIM_DISCHARGED'
-    | 'CLAIM_DISCHARGED_STEP2'
-    | 'CLAIM_DISCHARGED_HOSPITAL_SELECT'
-    | 'CLAIM_DISCHARGED_STEP3'
-    | 'CLAIM_DISCHARGED_STEP4'
-    | 'CLAIM_DISCHARGED_CONFIRM'
-    | 'CLAIM_DISCHARGED_SUBMITTED'
     | 'CLAIM_ACCIDENTAL_INJURY'
     | 'CLAIM_ACCIDENTAL_INJURY_FIRST'
     | 'CLAIM_INJURY_STEP2'
     | 'CLAIM_INJURY_STEP3'
-    | 'CLAIM_INJURY_CONFIRM'
     | 'CLAIM_INJURY_SUBMITTED'
     | 'CLAIM_DISABILITY'
     | 'CLAIM_DISABILITY_STEP2'
     | 'CLAIM_DISABILITY_STEP3'
-    | 'CLAIM_DISABILITY_CONFIRM'
     | 'CLAIM_DISABILITY_SUBMITTED'
     | 'CLAIM_DEATH'
     | 'CLAIM_DEATH_STEP2'
     | 'CLAIM_DEATH_STEP3'
-    | 'CLAIM_DEATH_CONFIRM'
     | 'CLAIM_DEATH_SUBMITTED'
     | 'SUPPORT';
 
@@ -70,12 +53,6 @@ export interface UserDataV2 {
     firstName: string;
     lastName: string;
     gender: string;
-    nextOfKin: {
-        fullName: string;
-        gender: string;
-        relationship: string;
-        phoneNumber: string;
-    };
     bvn: string;
     referralCode?: string;
 }
@@ -109,7 +86,7 @@ export type SheetTypeV2 =
     | 'onboarding'
     | 'nights'
     | 'bankLink'
-    | 'policyDetails'
+    | 'policy'
     | null;
 
 export interface BankDetailsV2 {

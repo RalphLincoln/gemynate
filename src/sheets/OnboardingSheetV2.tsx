@@ -14,11 +14,6 @@ const STEPS = [
             'Please provide your full name to personalize your experience.',
     },
     {
-        title: 'Next of Kin',
-        subtitle:
-            'We need your next of kin information for verification purposes.',
-    },
-    {
         title: 'Almost done!',
         subtitle: 'Verify your identity to activate your plan.',
     },
@@ -36,12 +31,6 @@ export function OnboardingSheetV2({
             firstName: '',
             lastName: '',
             gender: '',
-            nextOfKin: {
-                fullName: '',
-                gender: '',
-                relationship: '',
-                phoneNumber: '',
-            },
             bvn: '',
             referralCode: '',
         }
@@ -78,27 +67,11 @@ export function OnboardingSheetV2({
     const update = (field: keyof UserDataV2, value: string | object) =>
         setForm((prev) => ({ ...prev, [field]: value }));
 
-    const updateNextOfKin = (field: string, value: string) =>
-        setForm((prev) => ({
-            ...prev,
-            nextOfKin: {
-                ...prev.nextOfKin,
-                [field]: value,
-            },
-        }));
-
     // Per-step validation
     const stepValid = [
         // Step 0: name + gender
         !!(form.firstName && form.lastName && form.gender),
-        // Step 1: Next of Kin fields
-        !!(
-            form.nextOfKin.fullName &&
-            form.nextOfKin.gender &&
-            form.nextOfKin.relationship &&
-            form.nextOfKin.phoneNumber
-        ),
-        // Step 2: BVN 11 digits + verified
+        // Step 1: BVN 11 digits + verified
         bvnVerified,
     ];
 
@@ -173,22 +146,6 @@ export function OnboardingSheetV2({
                             value={form.lastName}
                         />
                         <ReadOnlyField label="Gender" value={form.gender} />
-                        <ReadOnlyField
-                            label="Next of Kin Name"
-                            value={form.nextOfKin.fullName}
-                        />
-                        <ReadOnlyField
-                            label="Next of Kin Gender"
-                            value={form.nextOfKin.gender}
-                        />
-                        <ReadOnlyField
-                            label="Relationship"
-                            value={form.nextOfKin.relationship}
-                        />
-                        <ReadOnlyField
-                            label="Next of Kin Phone"
-                            value={form.nextOfKin.phoneNumber}
-                        />
                         <ReadOnlyField
                             label="BVN"
                             value={form.bvn.replace(
@@ -296,43 +253,6 @@ export function OnboardingSheetV2({
                     )}
 
                     {step === 1 && (
-                        <>
-                            <CardField
-                                label="Full Name"
-                                value={form.nextOfKin.fullName}
-                                onChange={(v) => updateNextOfKin('fullName', v)}
-                                hint="Enter next of kin's full name"
-                                autoFocus
-                            />
-                            <div className="mt-[16px]">
-                                <GenderPicker
-                                    value={form.nextOfKin.gender}
-                                    onChange={(v) =>
-                                        updateNextOfKin('gender', v)
-                                    }
-                                />
-                            </div>
-                            <CardField
-                                label="Relationship"
-                                value={form.nextOfKin.relationship}
-                                onChange={(v) =>
-                                    updateNextOfKin('relationship', v)
-                                }
-                                hint="e.g., Father, Mother, Sibling, Spouse"
-                            />
-                            <CardField
-                                label="Phone Number"
-                                value={form.nextOfKin.phoneNumber}
-                                onChange={(v) =>
-                                    updateNextOfKin('phoneNumber', v)
-                                }
-                                hint="Enter phone number"
-                                inputMode="tel"
-                            />
-                        </>
-                    )}
-
-                    {step === 2 && (
                         <>
                             <CardField
                                 label="BVN"

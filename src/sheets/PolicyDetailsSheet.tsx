@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import type { PlanTier } from '../types';
-import { PLAN_BENEFITS } from '../data/flow';
-import { PLAN_COLORS } from '../data/flow-v2';
+import { PLAN_BENEFITS_V2, PLAN_COLORS } from '../data/flow-v2';
 
 interface PolicyDetailsSheetProps {
     selectedPlan: PlanTier | null;
@@ -26,7 +25,7 @@ export function PolicyDetailsSheet({
 
     const planColor = selectedPlan ? PLAN_COLORS[selectedPlan] : '#E53935';
 
-    const benefits = selectedPlan ? PLAN_BENEFITS[selectedPlan] : null;
+    const benefits = selectedPlan ? PLAN_BENEFITS_V2[selectedPlan] : null;
     const planLabel =
         selectedPlan === 'ruby'
             ? 'Ruby'
@@ -34,75 +33,40 @@ export function PolicyDetailsSheet({
               ? 'Emerald'
               : 'Sapphire';
     const policyNumber = `GEM-2026-${planLabel.toUpperCase().slice(0, 3)}-004821`;
-    const familySupport = 1000000;
+    const familySupport = benefits?.familySupport || 200000;
 
     const steps = [
         {
             title: 'WHAT WE COVER',
             content: (
-                <div className="space-y-4">
-                    {/* Hospital Cash */}
-                    <div
-                        className="rounded-lg px-4 py-3 border-l-4"
-                        style={{
-                            backgroundColor: `${planColor}15`,
-                            borderLeftColor: planColor,
-                        }}
-                    >
-                        <div className="font-semibold text-[14px] text-[#111] mb-1">
-                            Hospital Cash
-                        </div>
-                        <div className="text-[13px] text-[#666]">
-                            Up to ₦
-                            {(
-                                benefits?.hospitalCashPerNight || 0
-                            ).toLocaleString()}{' '}
-                            for every night in hospital
-                        </div>
+                <div className="space-y-4 text-gray-600">
+                    <div className="text-[13px] mb-1.5">
+                        <b>Accident Support:</b> Medical expenses from an
+                        accident covered once a year.
                     </div>
 
-                    {/* Hustle Shield */}
-                    <div
-                        className="rounded-lg px-4 py-3 border-l-4"
-                        style={{
-                            backgroundColor: `${planColor}15`,
-                            borderLeftColor: planColor,
-                        }}
-                    >
-                        <div className="font-semibold text-[14px] text-[#111] mb-1">
-                            Hustle Shield
-                        </div>
-                        <div className="text-[13px] text-[#666]">
-                            Up to ₦
-                            {(benefits?.hustleShield || 0).toLocaleString()} if
-                            an accident stops you from working
-                        </div>
+                    <div className="text-[13px]  mb-1.5">
+                        <b>Permanent Injury:</b> A payout up to ₦
+                        {familySupport.toLocaleString()} if a severe accident
+                        stops you from ever working again.
                     </div>
 
-                    {/* Family Support */}
-                    <div
-                        className="rounded-lg px-4 py-3 border-l-4"
-                        style={{
-                            backgroundColor: `${planColor}15`,
-                            borderLeftColor: planColor,
-                        }}
-                    >
-                        <div className="font-semibold text-[14px] text-[#111] mb-1">
-                            Family Support
-                        </div>
-                        <div className="text-[13px] text-[#666]">
-                            Up to ₦{familySupport.toLocaleString()} paid to your
-                            family
-                        </div>
+                    <div className="text-[13px] mb-1.5">
+                        <b>Next of Kin Support:</b> Up to ₦
+                        {familySupport.toLocaleString()} plus all your saved
+                        money paid to your family if the worst happens.
                     </div>
 
-                    {/* Cover Starts Info */}
-                    <div className="bg-[#f5f5f5] rounded-lg px-4 py-3 mt-4">
-                        <div className="text-[11px] text-[#999] uppercase tracking-wide font-semibold mb-1">
+                    <div className="py-3 mt-3">
+                        <div
+                            className="text-[11px] font-semibold uppercase tracking-wide mb-2"
+                            style={{ color: planColor }}
+                        >
                             Cover Starts
                         </div>
-                        <div className="text-[13px] font-semibold text-[#111]">
-                            30 days after first payment
+                        <div className="text-[13px] text-[#111]">
+                            30 days after you complete your first monthly
+                            contribution goal
                         </div>
                     </div>
                 </div>
@@ -112,15 +76,11 @@ export function PolicyDetailsSheet({
             title: 'WHAT IS NOT COVERED',
             content: (
                 <div className="space-y-3">
-                    <div className="text-[13px] text-[#666]">
-                        Cover does not apply to:
-                    </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1">
                         {[
-                            'Pre-existing medical conditions',
-                            'Pregnancy, maternity, and fertility treatments',
-                            'Cosmetic procedures and plastic surgery',
-                            'Experimental or unproven treatments',
+                            'Pre-existing conditions',
+                            'Pregnancy and maternity',
+                            'Cosmetic procedures',
                             'Self-inflicted injuries',
                         ].map((item) => (
                             <li
@@ -128,7 +88,7 @@ export function PolicyDetailsSheet({
                                 className="flex gap-3 text-[13px] text-[#555]"
                             >
                                 <span
-                                    className="font-bold mt-0.5"
+                                    className="font-bold"
                                     style={{ color: planColor }}
                                 >
                                     •
@@ -137,12 +97,6 @@ export function PolicyDetailsSheet({
                             </li>
                         ))}
                     </ul>
-                    <div className="bg-[#fafafa] rounded-lg px-4 py-3 mt-4 border border-[#e0e0e0]">
-                        <div className="text-[12px] text-[#666]">
-                            Cover applies only after the 30-day waiting period
-                            from your first payment.
-                        </div>
-                    </div>
                 </div>
             ),
         },
@@ -237,19 +191,14 @@ export function PolicyDetailsSheet({
                     style={{ backgroundColor: planColor }}
                 >
                     <div className="flex items-start justify-between">
-                        <div>
-                            <div className="text-[17px] font-semibold">
-                                Insurance BackUp Policy
-                            </div>
-                            <div className="text-[13px] opacity-90 mt-1">
-                                {planLabel} Plan — {policyNumber}
-                            </div>
+                        <div className="text-[15px] font-semibold">
+                            Here is your {planLabel} BackUp Policy
                         </div>
                         <button
                             onClick={onClose}
                             className="cursor-pointer active:opacity-60 flex-shrink-0 mt-1"
                         >
-                            <svg width="16" height="16" viewBox="0 0 14 14">
+                            <svg width="14" height="14" viewBox="0 0 14 14">
                                 <path
                                     d="M1 1l12 12M13 1L1 13"
                                     stroke="white"
@@ -263,15 +212,15 @@ export function PolicyDetailsSheet({
 
                 {/* Content */}
                 <div
-                    className="flex-1 overflow-y-auto px-[20px] py-[24px]"
+                    className="flex-1 overflow-y-auto px-[20px] py-[20px]"
                     style={{
                         WebkitOverflowScrolling: 'touch',
                         scrollbarWidth: 'none',
                     }}
                 >
-                    <div className="mb-2">
+                    <div className="">
                         <div
-                            className="text-[13px] font-semibold uppercase tracking-wide mb-3"
+                            className="text-[11px] font-semibold uppercase tracking-wide mb-2"
                             style={{ color: planColor }}
                         >
                             {step.title}
@@ -282,28 +231,6 @@ export function PolicyDetailsSheet({
 
                 {/* Footer */}
                 <div className="px-[20px] py-[16px] shrink-0 sticky bottom-0 bg-white border-t border-[#e0e0e0]">
-                    {/* Step counter and progress dots */}
-                    <div className="flex items-center justify-between mb-4">
-                        <span className="text-[12px] text-[#999]">
-                            {currentStep + 1} / {steps.length}
-                        </span>
-                        <div className="flex gap-1">
-                            {steps.map((_, i) => (
-                                <div
-                                    key={i}
-                                    className="h-2 flex-1 rounded-full transition-colors"
-                                    style={{
-                                        maxWidth: '20px',
-                                        backgroundColor:
-                                            i <= currentStep
-                                                ? planColor
-                                                : '#e0e0e0',
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Back and Next/Done buttons */}
                     <div className="flex gap-3">
                         {/* Back Button */}
